@@ -1,0 +1,10 @@
+[33mcommit 31fba1b67236306fac2394f3bb608c06e9f67bbb[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: ludvig <luos1910@gmail.com>
+Date:   Mon Aug 11 19:20:03 2025 +0200
+
+    Oppdatering
+
+.nvmrc
+netlify.toml
+package-lock.json
+package.json
