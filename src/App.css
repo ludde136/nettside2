@@ -461,6 +461,12 @@ body {
   color: #3498db;
 }
 
+.social-link-placeholder {
+  color: #95a5a6;
+  cursor: default;
+  opacity: 0.7;
+}
+
 .footer-bottom {
   border-top: 1px solid #34495e;
   padding-top: 2rem;

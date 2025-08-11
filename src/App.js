@@ -434,15 +434,9 @@ function App() {
                   ))
                 ) : (
                   <>
-                    <a href="#" className="social-link">
-                      Facebook
-                    </a>
-                    <a href="#" className="social-link">
-                      Instagram
-                    </a>
-                    <a href="#" className="social-link">
-                      Twitter
-                    </a>
+                    <span className="social-link-placeholder">Facebook</span>
+                    <span className="social-link-placeholder">Instagram</span>
+                    <span className="social-link-placeholder">Twitter</span>
                   </>
                 )}
               </div>
