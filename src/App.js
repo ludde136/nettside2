@@ -103,16 +103,16 @@ function App() {
         <div className="header-content">
           <h1 className="logo">hyttegjest.no</h1>
           <nav className="nav">
-            <a href="#top" className="nav-link">
+            <a href="/" className="nav-link">
               Hjem
             </a>
-            <a href="#hytter" className="nav-link">
+            <a href="/#hytter" className="nav-link">
               Hytter
             </a>
-            <a href="#om-oss" className="nav-link">
+            <a href="/#om-oss" className="nav-link">
               Om oss
             </a>
-            <a href="#kontakt" className="nav-link">
+            <a href="/#kontakt" className="nav-link">
               Kontakt
             </a>
           </nav>
@@ -128,7 +128,7 @@ function App() {
           <p className="hero-subtitle">
             {hero.subtitle || "Bok din drømmehytte i hjertet av norsk natur"}
           </p>
-          <a href="#hytter" className="cta-button">
+          <a href="/#hytter" className="cta-button">
             {hero.buttonText || "Se tilgjengelige hytter"}
           </a>
         </div>
