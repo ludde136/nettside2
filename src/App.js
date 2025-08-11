@@ -28,6 +28,14 @@ function App() {
     error: null,
   });
 
+  // Smooth scroll funksjon
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // Håndter input-endringer
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -103,18 +111,30 @@ function App() {
         <div className="header-content">
           <h1 className="logo">hyttegjest.no</h1>
           <nav className="nav">
-            <a href="/" className="nav-link">
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="nav-link"
+            >
               Hjem
-            </a>
-            <a href="/#hytter" className="nav-link">
+            </button>
+            <button
+              onClick={() => scrollToSection("hytter")}
+              className="nav-link"
+            >
               Hytter
-            </a>
-            <a href="/#om-oss" className="nav-link">
+            </button>
+            <button
+              onClick={() => scrollToSection("om-oss")}
+              className="nav-link"
+            >
               Om oss
-            </a>
-            <a href="/#kontakt" className="nav-link">
+            </button>
+            <button
+              onClick={() => scrollToSection("kontakt")}
+              className="nav-link"
+            >
               Kontakt
-            </a>
+            </button>
           </nav>
         </div>
       </header>
@@ -128,9 +148,12 @@ function App() {
           <p className="hero-subtitle">
             {hero.subtitle || "Bok din drømmehytte i hjertet av norsk natur"}
           </p>
-          <a href="/#hytter" className="cta-button">
+          <button
+            onClick={() => scrollToSection("hytter")}
+            className="cta-button"
+          >
             {hero.buttonText || "Se tilgjengelige hytter"}
-          </a>
+          </button>
         </div>
       </section>
 
