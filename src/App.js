@@ -451,7 +451,9 @@ function App() {
               <div className="social-links">
                 {footer.socialLinks && footer.socialLinks.length > 0 ? (
                   footer.socialLinks.map((link, index) =>
-                    link.url && link.url !== "#" ? (
+                    link.url &&
+                    link.url.trim() !== "" &&
+                    link.url.startsWith("http") ? (
                       <a key={index} href={link.url} className="social-link">
                         {link.navn}
                       </a>
