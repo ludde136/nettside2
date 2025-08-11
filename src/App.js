@@ -426,12 +426,18 @@ function App() {
             <div className="footer-section">
               <h4>{footer.socialTitle || "Følg oss"}</h4>
               <div className="social-links">
-                {footer.socialLinks ? (
-                  footer.socialLinks.map((link, index) => (
-                    <a key={index} href={link.url} className="social-link">
-                      {link.navn}
-                    </a>
-                  ))
+                {footer.socialLinks && footer.socialLinks.length > 0 ? (
+                  footer.socialLinks.map((link, index) =>
+                    link.url && link.url !== "#" ? (
+                      <a key={index} href={link.url} className="social-link">
+                        {link.navn}
+                      </a>
+                    ) : (
+                      <span key={index} className="social-link-placeholder">
+                        {link.navn}
+                      </span>
+                    )
+                  )
                 ) : (
                   <>
                     <span className="social-link-placeholder">Facebook</span>
