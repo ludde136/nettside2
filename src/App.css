@@ -229,6 +229,9 @@ body {
 
 .hytte-detaljer {
   margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .kapasitet {
@@ -261,6 +264,46 @@ body {
 .book-button:hover,
 .book-button-link:hover {
   background-color: #2980b9 !important;
+}
+
+/* Instagram-ikon styling */
+.instagram-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.instagram-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: linear-gradient(
+    45deg,
+    #f09433 0%,
+    #e6683c 25%,
+    #dc2743 50%,
+    #cc2366 75%,
+    #bc1888 100%
+  );
+  color: white;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: auto;
+  min-width: 120px;
+}
+
+.instagram-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(220, 39, 67, 0.3);
+  color: white;
+}
+
+.instagram-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
 }
 
 /* Om oss Section */
