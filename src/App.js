@@ -1,7 +1,15 @@
 import "./App.css";
 import { useFirebaseData } from "./hooks/useFirebaseData";
-import { useState } from "react";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  doc,
+  setDoc,
+  getDoc,
+  increment,
+} from "firebase/firestore";
 import { db } from "./firebase";
 
 function App() {
@@ -28,6 +36,9 @@ function App() {
     error: null,
   });
 
+  // State for besøkstall
+  const [besokTall, setBesokTall] = useState(0);
+
   // Smooth scroll funksjon
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -44,6 +55,62 @@ function App() {
       [name]: value,
     }));
   };
+
+  // Registrer besøk
+  const registrerBesok = async () => {
+    const besokKey = `besok_${new Date().toDateString()}`;
+    const harBesokt = localStorage.getItem(besokKey);
+
+    if (!harBesokt) {
+      try {
+        // Oppdater besøkstall i Firestore
+        const besokRef = doc(db, "statistikk", "besok");
+        await setDoc(
+          besokRef,
+          {
+            total: increment(1),
+            sistOppdatert: serverTimestamp(),
+          },
+          { merge: true }
+        );
+
+        // Marker at denne brukeren har besøkt i dag
+        localStorage.setItem(besokKey, "true");
+
+        // Hent oppdatert tall
+        const docSnap = await getDoc(besokRef);
+        if (docSnap.exists()) {
+          setBesokTall(docSnap.data().total || 0);
+        }
+      } catch (error) {
+        console.error("Feil ved registrering av besøk:", error);
+      }
+    }
+  };
+
+  // Hent besøkstall ved lasting
+  const hentBesokTall = async () => {
+    try {
+      const besokRef = doc(db, "statistikk", "besok");
+      const docSnap = await getDoc(besokRef);
+      if (docSnap.exists()) {
+        setBesokTall(docSnap.data().total || 0);
+      }
+    } catch (error) {
+      console.error("Feil ved henting av besøkstall:", error);
+    }
+  };
+
+  // Registrer besøk og hent tall når komponenten lastes
+  useEffect(() => {
+    hentBesokTall();
+
+    // Bruk en global variabel for å unngå dobbeltregistrering
+    if (!window.besokRegistrert) {
+      window.besokRegistrert = true;
+      registrerBesok();
+    }
+  }, []);
 
   // Håndter skjema-submit
   const handleSubmit = async (e) => {
@@ -128,6 +195,12 @@ function App() {
               className="nav-link"
             >
               Om oss
+            </button>
+            <button
+              onClick={() => scrollToSection("bli-hytteutleier")}
+              className="nav-link"
+            >
+              Bli hytteutleier
             </button>
             <button
               onClick={() => scrollToSection("kontakt")}
@@ -252,7 +325,7 @@ function App() {
                         rel="noopener noreferrer"
                         className="book-button-link"
                       >
-                        Book nå
+                        Les mer & Book
                       </a>
                     ) : hytte.navn === "Hytteidyll Krokkleiva" ? (
                       <a
@@ -261,10 +334,10 @@ function App() {
                         rel="noopener noreferrer"
                         className="book-button-link"
                       >
-                        Book nå
+                        Les mer & Book
                       </a>
                     ) : (
-                      <button className="book-button">Book nå</button>
+                      <button className="book-button">Les mer & Book</button>
                     )}
                   </div>
                 </div>
@@ -317,6 +390,116 @@ function App() {
                 src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=400&fit=crop"
                 alt="Norsk skog og natur"
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bli hytteutleier Section */}
+      <section className="bli-hytteutleier-section" id="bli-hytteutleier">
+        <div className="container">
+          <h2 className="section-title">Bli hytteutleier</h2>
+          <div className="bli-hytteutleier-content">
+            <div className="bli-hytteutleier-text">
+              <h3>Gjør din hytte til en inntektskilde</h3>
+              <p>
+                Har du en hytte som står tom mesteparten av året? La oss hjelpe
+                deg med å gjøre den til en lukrativ inntektskilde! Vi tar oss av
+                alt det driftsrelaterte arbeidet, så du kan fokusere på det som
+                betyr mest.
+              </p>
+
+              <h3>Hva vi tilbyr</h3>
+              <div className="tjenester-grid">
+                <div className="tjeneste-kort">
+                  <div className="tjeneste-ikon">🏠</div>
+                  <h4>Komplett hytteforberedelse</h4>
+                  <p>
+                    Vi gjør hytta utleieklar med alt fra rengjøring til
+                    sengeklær
+                  </p>
+                </div>
+                <div className="tjeneste-kort">
+                  <div className="tjeneste-ikon">📱</div>
+                  <h4>Booking og administrasjon</h4>
+                  <p>Vi håndterer alle reservasjoner og kundekontakter</p>
+                </div>
+                <div className="tjeneste-kort">
+                  <div className="tjeneste-ikon">💰</div>
+                  <h4>Optimal prissetting</h4>
+                  <p>Vi setter konkurransedyktige priser basert på markedet</p>
+                </div>
+                <div className="tjeneste-kort">
+                  <div className="tjeneste-ikon">📸</div>
+                  <h4>Profesjonell markedsføring</h4>
+                  <p>
+                    Vi fotograferer og markedsfører hytta på våre plattformer
+                  </p>
+                </div>
+              </div>
+
+              <h3>Hvorfor velge oss?</h3>
+              <ul className="fordeler-liste">
+                <li>
+                  ✅ <strong>Ingen startkostnader</strong> - vi tar kun en
+                  prosentandel av inntektene
+                </li>
+                <li>
+                  ✅ <strong>Komplett service</strong> - du trenger ikke gjøre
+                  noe
+                </li>
+                <li>
+                  ✅ <strong>Høy inntekt</strong> - vi maksimaliserer
+                  utleiepotensialet
+                </li>
+                <li>
+                  ✅ <strong>Pålitelig drift</strong> - 24/7 kundeservice og
+                  support
+                </li>
+                <li>
+                  ✅ <strong>Fleksibilitet</strong> - du bestemmer når hytta
+                  skal være tilgjengelig
+                </li>
+              </ul>
+
+              <h3>Hvordan det fungerer</h3>
+              <div className="prosess-steg">
+                <div className="steg">
+                  <div className="steg-nummer">1</div>
+                  <h4>Kontakt oss</h4>
+                  <p>Ta kontakt for en uforpliktende samtale om din hytte</p>
+                </div>
+                <div className="steg">
+                  <div className="steg-nummer">2</div>
+                  <h4>Vurdering</h4>
+                  <p>Vi vurderer hyttas potensial og setter opp en plan</p>
+                </div>
+                <div className="steg">
+                  <div className="steg-nummer">3</div>
+                  <h4>Oppstart</h4>
+                  <p>Vi gjør hytta utleieklar og starter markedsføringen</p>
+                </div>
+                <div className="steg">
+                  <div className="steg-nummer">4</div>
+                  <h4>Utleie</h4>
+                  <p>Din hytte blir leid ut og du får inntekter</p>
+                </div>
+              </div>
+
+              <div className="cta-seksjon">
+                <h3>Klar til å starte?</h3>
+                <p>
+                  Ta kontakt med oss i dag for å høre mer om hvordan vi kan
+                  hjelpe deg med å gjøre din hytte til en suksessfull
+                  utleieeiendom.
+                </p>
+                <button
+                  onClick={() => scrollToSection("kontakt")}
+                  className="cta-button"
+                >
+                  Ta kontakt nå
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -475,27 +658,24 @@ function App() {
             <div className="footer-section">
               <h4>{footer.socialTitle || "Følg oss"}</h4>
               <div className="social-links">
-                {footer.socialLinks && footer.socialLinks.length > 0 ? (
-                  footer.socialLinks.map((link, index) =>
-                    link.url &&
-                    link.url.trim() !== "" &&
-                    link.url.startsWith("http") ? (
-                      <a key={index} href={link.url} className="social-link">
-                        {link.navn}
-                      </a>
-                    ) : (
-                      <span key={index} className="social-link-placeholder">
-                        {link.navn}
-                      </span>
-                    )
-                  )
-                ) : (
-                  <>
-                    <span className="social-link-placeholder">Facebook</span>
-                    <span className="social-link-placeholder">Instagram</span>
-                    <span className="social-link-placeholder">Twitter</span>
-                  </>
-                )}
+                <a
+                  href="https://www.instagram.com/trulsrudkollen"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="instagram-link-footer"
+                  title="Følg oss på Instagram"
+                >
+                  <svg
+                    className="instagram-icon"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    width="20"
+                    height="20"
+                  >
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                  </svg>
+                  Instagram
+                </a>
               </div>
             </div>
           </div>
