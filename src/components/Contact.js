@@ -81,7 +81,13 @@ function Contact({ kontakt = {} }) {
                 <span className="kontakt-ikon">📧</span>
                 <div>
                   <h4>E-post</h4>
-                  <p>{kontakt.epost || "ludde1910@hotmail.com"}</p>
+                  <a
+                    href={`mailto:${kontakt.epost || "ludde1910@hotmail.com"}`}
+                    className="kontakt-lenke"
+                    title="Send e-post"
+                  >
+                    {kontakt.epost || "ludde1910@hotmail.com"}
+                  </a>
                 </div>
               </div>
 
@@ -89,7 +95,13 @@ function Contact({ kontakt = {} }) {
                 <span className="kontakt-ikon">📱</span>
                 <div>
                   <h4>Mobil</h4>
-                  <p>{kontakt.mobil || "90150051"}</p>
+                  <a
+                    href={`tel:${kontakt.mobil || "90150051"}`}
+                    className="kontakt-lenke"
+                    title="Ring oss"
+                  >
+                    {kontakt.mobil || "90150051"}
+                  </a>
                 </div>
               </div>
 
@@ -97,7 +109,15 @@ function Contact({ kontakt = {} }) {
                 <span className="kontakt-ikon">🌐</span>
                 <div>
                   <h4>Nettside</h4>
-                  <p>{kontakt.nettside || "www.hyttegjest.no"}</p>
+                  <a
+                    href={`https://${kontakt.nettside || "www.hyttegjest.no"}`}
+                    className="kontakt-lenke"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Besøk nettsiden"
+                  >
+                    {kontakt.nettside || "www.hyttegjest.no"}
+                  </a>
                 </div>
               </div>
             </div>

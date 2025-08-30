@@ -608,8 +608,26 @@ function App() {
             </div>
             <div className="footer-section">
               <h4>{footer.kontaktTitle || "Kontakt"}</h4>
-              <p>📧 {footer.epost || "ludde1910@hotmail.com"}</p>
-              <p>📞 {footer.mobil || "90150051"}</p>
+              <p>
+                📧{" "}
+                <a
+                  href={`mailto:${footer.epost || "ludde1910@hotmail.com"}`}
+                  className="footer-kontakt-lenke"
+                  title="Send e-post"
+                >
+                  {footer.epost || "ludde1910@hotmail.com"}
+                </a>
+              </p>
+              <p>
+                📞{" "}
+                <a
+                  href={`tel:${footer.mobil || "90150051"}`}
+                  className="footer-kontakt-lenke"
+                  title="Ring oss"
+                >
+                  {footer.mobil || "90150051"}
+                </a>
+              </p>
             </div>
             <div className="footer-section">
               <h4>{footer.socialTitle || "Følg oss"}</h4>

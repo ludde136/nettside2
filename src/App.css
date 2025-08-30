@@ -452,6 +452,19 @@ body {
   color: #555;
 }
 
+.kontakt-lenke {
+  color: #3498db;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.kontakt-lenke:hover {
+  color: #2980b9;
+  border-bottom-color: #2980b9;
+  transform: translateY(-1px);
+}
+
 .kontakt-skjema h3 {
   color: #2c3e50;
   margin-bottom: 1.5rem;
@@ -568,6 +581,18 @@ body {
 .footer-section p {
   margin-bottom: 0.5rem;
   color: #bdc3c7;
+}
+
+.footer-kontakt-lenke {
+  color: #3498db;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.footer-kontakt-lenke:hover {
+  color: #5dade2;
+  border-bottom-color: #5dade2;
 }
 
 .social-links {
