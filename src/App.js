@@ -1,15 +1,8 @@
 import "./App.css";
 import { useFirebaseData } from "./hooks/useFirebaseData";
 import { useState, useEffect } from "react";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  doc,
-  setDoc,
-  getDoc,
-  increment,
-} from "firebase/firestore";
+import Contact from "./components/Contact";
+import { doc, setDoc, getDoc, increment, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebase";
 
 function App() {
@@ -21,20 +14,6 @@ function App() {
     kontakt = {},
     footer = {},
   } = data;
-
-  // State for kontakt-skjemaet
-  const [formData, setFormData] = useState({
-    navn: "",
-    epost: "",
-    telefon: "",
-    emne: "",
-    melding: "",
-  });
-  const [formStatus, setFormStatus] = useState({
-    submitting: false,
-    submitted: false,
-    error: null,
-  });
 
   // State for besøkstall
   const [besokTall, setBesokTall] = useState(0);
@@ -81,15 +60,6 @@ function App() {
     setIsHamburgerMenuOpen(false);
     setCurrentView(newView);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // Håndter input-endringer
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   // Registrer besøk
@@ -147,43 +117,6 @@ function App() {
       registrerBesok();
     }
   }, []);
-
-  // Håndter skjema-submit
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormStatus({ submitting: true, submitted: false, error: null });
-
-    try {
-      // Lagre til Firestore
-      await addDoc(collection(db, "kontakt-meldinger"), {
-        ...formData,
-        timestamp: serverTimestamp(),
-        status: "ny",
-      });
-
-      // Reset skjemaet og vis suksess
-      setFormData({
-        navn: "",
-        epost: "",
-        telefon: "",
-        emne: "",
-        melding: "",
-      });
-      setFormStatus({ submitting: false, submitted: true, error: null });
-
-      // Reset suksess-melding etter 5 sekunder
-      setTimeout(() => {
-        setFormStatus((prev) => ({ ...prev, submitted: false }));
-      }, 5000);
-    } catch (error) {
-      console.error("Feil ved sending av melding:", error);
-      setFormStatus({
-        submitting: false,
-        submitted: false,
-        error: "Kunne ikke sende melding. Prøv igjen senere.",
-      });
-    }
-  };
 
   if (loading) {
     return (
@@ -476,140 +409,7 @@ function App() {
             </div>
           </section>
           {/* Kontakt Section */}
-          <section className="kontakt-section" id="kontakt">
-            <div className="container">
-              <h2 className="section-title">
-                {kontakt.title || "Kontakt oss"}
-              </h2>
-              <div className="kontakt-content">
-                <div className="kontakt-info">
-                  <h3>{kontakt.undertittel || "Ta kontakt"}</h3>
-                  <p>
-                    {kontakt.beskrivelse ||
-                      "Vi er her for å hjelpe deg med å finne en hytte som passer deg!"}
-                  </p>
-
-                  <div className="kontakt-detaljer">
-                    <div className="kontakt-item">
-                      <span className="kontakt-ikon">📧</span>
-                      <div>
-                        <h4>E-post</h4>
-                        <p>{kontakt.epost || "ludde1910@hotmail.com"}</p>
-                      </div>
-                    </div>
-
-                    <div className="kontakt-item">
-                      <span className="kontakt-ikon">📱</span>
-                      <div>
-                        <h4>Mobil</h4>
-                        <p>{kontakt.mobil || "90150051"}</p>
-                      </div>
-                    </div>
-
-                    <div className="kontakt-item">
-                      <span className="kontakt-ikon">🌐</span>
-                      <div>
-                        <h4>Nettside</h4>
-                        <p>{kontakt.nettside || "www.hyttegjest.no"}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="kontakt-skjema">
-                  <h3>Send oss en melding</h3>
-
-                  {/* Status-meldinger */}
-                  {formStatus.submitted && (
-                    <div className="success-message">
-                      <p>🎉 Takk for din melding! Vi tar kontakt snart.</p>
-                    </div>
-                  )}
-
-                  {formStatus.error && (
-                    <div className="error-message">
-                      <p>❌ {formStatus.error}</p>
-                    </div>
-                  )}
-
-                  <form className="kontakt-form" onSubmit={handleSubmit}>
-                    <div className="form-gruppe">
-                      <label htmlFor="navn">Navn *</label>
-                      <input
-                        type="text"
-                        id="navn"
-                        name="navn"
-                        value={formData.navn}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-gruppe">
-                      <label htmlFor="epost">E-post *</label>
-                      <input
-                        type="email"
-                        id="epost"
-                        name="epost"
-                        value={formData.epost}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-
-                    <div className="form-gruppe">
-                      <label htmlFor="telefon">Telefon</label>
-                      <input
-                        type="tel"
-                        id="telefon"
-                        name="telefon"
-                        value={formData.telefon}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="form-gruppe">
-                      <label htmlFor="emne">Emne *</label>
-                      <select
-                        id="emne"
-                        name="emne"
-                        value={formData.emne}
-                        onChange={handleInputChange}
-                        required
-                      >
-                        <option value="">Velg emne</option>
-                        <option value="booking">Booking og reservasjon</option>
-                        <option value="spørsmål">Generelle spørsmål</option>
-                        <option value="tilbakemelding">Tilbakemelding</option>
-                        <option value="samarbeid">Samarbeid</option>
-                        <option value="annet">Annet</option>
-                      </select>
-                    </div>
-
-                    <div className="form-gruppe">
-                      <label htmlFor="melding">Melding *</label>
-                      <textarea
-                        id="melding"
-                        name="melding"
-                        rows="5"
-                        value={formData.melding}
-                        onChange={handleInputChange}
-                        required
-                      ></textarea>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="send-button"
-                      disabled={formStatus.submitting}
-                    >
-                      {formStatus.submitting ? "Sender..." : "Send melding"}
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </section>
+          <Contact kontakt={kontakt} />
         </>
       ) : (
         <>
@@ -735,6 +535,9 @@ function App() {
               </div>
             </div>
           </section>
+
+          {/* Kontakt Section */}
+          <Contact kontakt={kontakt} />
         </>
       )}
 
