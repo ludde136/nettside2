@@ -33,6 +33,7 @@ function App() {
 
   // State for info popup
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [currentHytte, setCurrentHytte] = useState("");
 
   // Smooth scroll funksjon
   const scrollToSection = (sectionId) => {
@@ -73,7 +74,10 @@ function App() {
   };
 
   // Håndter popup
-  const openPopup = () => setIsPopupOpen(true);
+  const openPopup = (hytteNavn) => {
+    setCurrentHytte(hytteNavn);
+    setIsPopupOpen(true);
+  };
   const closePopup = () => setIsPopupOpen(false);
 
   // Registrer besøk
@@ -324,7 +328,7 @@ function App() {
                         <div className="hytte-detaljer">
                           <span
                             className="kapasitet clickable"
-                            onClick={openPopup}
+                            onClick={() => openPopup(hytte.navn)}
                             title="Klikk for mer info"
                           >
                             👥 {hytte.kapasitet}
@@ -567,14 +571,26 @@ function App() {
       <InfoPopup
         isOpen={isPopupOpen}
         onClose={closePopup}
-        title="Kapasitet & Anneks"
+        title="Kapasitet & Soveplasser"
         content={
           <div>
-            <p>
-              Legg til annekset som tillegsbestilling og få utvidet kapasiteten
-              med 4 personer ekstra. Dette tilsvarer mulighet til å huse inntil
-              ca 8 personer (9 personer med skuvsengen, for de minste 😊).
-            </p>
+            {currentHytte === "Markahytte Trulsrudkollen" ? (
+              <p>
+                Legg til annekset som tillegsbestilling og få utvidet
+                kapasiteten med 4 personer ekstra. Dette tilsvarer mulighet til
+                å huse inntil ca 8 personer (9 personer med skuvsengen, for de
+                minste 😊).
+              </p>
+            ) : currentHytte === "Hytteidyll Krokkleiva" ? (
+              <p>
+                Dobbeltseng og 2 feltsenger, ta med egen dyne eller sovepose
+                dersom feltsenger benyttes.
+              </p>
+            ) : (
+              <p>
+                Kontakt oss for mer informasjon om soveplasser og kapasitet.
+              </p>
+            )}
           </div>
         }
       />
