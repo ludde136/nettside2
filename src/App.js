@@ -2,7 +2,14 @@ import "./App.css";
 import { useFirebaseData } from "./hooks/useFirebaseData";
 import { useState, useEffect } from "react";
 import Contact from "./components/Contact";
-import { doc, setDoc, getDoc, increment, serverTimestamp } from "firebase/firestore";
+import InfoPopup from "./components/InfoPopup";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  increment,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "./firebase";
 
 function App() {
@@ -23,6 +30,9 @@ function App() {
 
   // State for hvilken visning som skal vises
   const [currentView, setCurrentView] = useState("main"); // 'main' eller 'hytteutleier'
+
+  // State for info popup
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   // Smooth scroll funksjon
   const scrollToSection = (sectionId) => {
@@ -61,6 +71,10 @@ function App() {
     setCurrentView(newView);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Håndter popup
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
 
   // Registrer besøk
   const registrerBesok = async () => {
@@ -274,7 +288,7 @@ function App() {
                               src="/Skjermbilde 2025-08-12 213230.png"
                               alt={hytte.navn}
                             />
-                            <div className="hytte-pris">{hytte.pris}</div>
+                            <div className="hytte-pris">fra {hytte.pris}</div>
                           </a>
                         ) : (
                           <>
@@ -286,12 +300,16 @@ function App() {
                                 className="hytte-bilde-lenke"
                               >
                                 <img src={hytte.bilde} alt={hytte.navn} />
-                                <div className="hytte-pris">{hytte.pris}</div>
+                                <div className="hytte-pris">
+                                  fra {hytte.pris}
+                                </div>
                               </a>
                             ) : (
                               <>
                                 <img src={hytte.bilde} alt={hytte.navn} />
-                                <div className="hytte-pris">{hytte.pris}</div>
+                                <div className="hytte-pris">
+                                  fra {hytte.pris}
+                                </div>
                               </>
                             )}
                           </>
@@ -304,7 +322,11 @@ function App() {
                         </p>
                         <p className="hytte-beskrivelse">{hytte.beskrivelse}</p>
                         <div className="hytte-detaljer">
-                          <span className="kapasitet">
+                          <span
+                            className="kapasitet clickable"
+                            onClick={openPopup}
+                            title="Klikk for mer info"
+                          >
                             👥 {hytte.kapasitet}
                           </span>
 
@@ -540,6 +562,22 @@ function App() {
           <Contact kontakt={kontakt} />
         </>
       )}
+
+      {/* Info Popup */}
+      <InfoPopup
+        isOpen={isPopupOpen}
+        onClose={closePopup}
+        title="Kapasitet & Anneks"
+        content={
+          <div>
+            <p>
+              Legg til annekset som tillegsbestilling og få utvidet kapasiteten
+              med 4 personer ekstra. Dette tilsvarer mulighet til å huse inntil
+              ca 8 personer (9 personer med skuvsengen, for de minste 😊).
+            </p>
+          </div>
+        }
+      />
 
       {/* Footer */}
       <footer className="footer">
