@@ -373,19 +373,47 @@ function ForHyttegjester() {
         {t.title}
       </Typography>
 
-      {/* Fane-navigasjon */}
-      <Box sx={{ borderBottom: 1, borderColor: "divider", marginBottom: 4 }}>
+      {/* Fane-navigasjon med horisontal scroll */}
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+          marginBottom: 4,
+          overflowX: "auto",
+          "&::-webkit-scrollbar": {
+            height: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "rgba(0,0,0,0.1)",
+            borderRadius: "3px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#4a7c59",
+            borderRadius: "3px",
+            "&:hover": {
+              backgroundColor: "#2d5016",
+            },
+          },
+        }}
+      >
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
           aria-label="hytte-informasjon faner"
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
           sx={{
+            minHeight: "48px",
             "& .MuiTab-root": {
               color: "#4a7c59",
               fontWeight: 500,
-              fontSize: "1.1rem",
+              fontSize: { xs: "0.9rem", sm: "1.1rem" },
               textTransform: "none",
               minHeight: "48px",
+              minWidth: { xs: "120px", sm: "auto" },
+              padding: { xs: "12px 16px", sm: "12px 24px" },
+              whiteSpace: "nowrap",
             },
             "& .Mui-selected": {
               color: "#2d5016",
@@ -394,6 +422,12 @@ function ForHyttegjester() {
             "& .MuiTabs-indicator": {
               backgroundColor: "#4a7c59",
               height: "3px",
+            },
+            "& .MuiTabs-scrollButtons": {
+              color: "#4a7c59",
+              "&.Mui-disabled": {
+                opacity: 0.3,
+              },
             },
           }}
         >
