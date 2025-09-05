@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -295,14 +296,37 @@ function ForHyttegjester() {
           "linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(226, 232, 240, 0.6) 100%)",
       }}
     >
-      {/* Språkswitch */}
+      {/* Header med hjemmeside-lenke og språkswitch */}
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: 2,
         }}
       >
+        {/* Hjemmeside-lenke */}
+        <Typography
+          variant="h4"
+          component={Link}
+          to="/"
+          sx={{
+            color: "#4a7c59",
+            fontWeight: 500,
+            fontSize: { xs: "1.2rem", sm: "1.5rem" },
+            textDecoration: "none",
+            opacity: 0.8,
+            "&:hover": {
+              color: "#2d5016",
+              textDecoration: "underline",
+              opacity: 1,
+            },
+          }}
+        >
+          hyttegjest.no
+        </Typography>
+
+        {/* Språkswitch */}
         <FormControlLabel
           control={
             <Switch
